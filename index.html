@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>S. Veerendiran | Lighting Design Engineer</title>
+  <meta name="description" content="Portfolio of S. Veerendiran – Lighting Designer & Estimation Engineer at Prominence Unicell. ECE Graduate specializing in AutoCAD, DIALux, and Lighting Simulation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ========================
+       CSS VARIABLES & RESET
+    ======================== */
+    :root {
+      --neon: #b9ff2f;
+      --neon-dim: #7ec900;
+      --neon-glow: rgba(185, 255, 47, 0.35);
+      --neon-soft: rgba(185, 255, 47, 0.1);
+      --bg: #050508;
+      --bg2: #0c0c12;
+      --bg3: #111118;
+      --glass: rgba(185, 255, 47, 0.05);
+      --glass-border: rgba(185, 255, 47, 0.15);
+      --text: #e8e8f0;
+      --text-muted: #7a7a9a;
+      --card-bg: rgba(15, 15, 22, 0.9);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::selection { background: var(--neon); color: #000; }
+
+    /* ========================
+       SCROLLBAR
+    ======================== */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--neon-dim); border-radius: 10px; }
+
+    /* ========================
+       CANVAS (PARTICLES)
+    ======================== */
+    #particle-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ========================
+       NAV
+    ======================== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(5, 5, 8, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--neon);
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-shadow: 0 0 20px var(--neon-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s, text-shadow 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 2px;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--neon); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .hamburger span {
+      width: 25px; height: 2px;
+      background: var(--neon);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ========================
+       HERO SECTION
+    ======================== */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem 4rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-bg-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(185,255,47,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+      50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 860px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--neon-soft);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--neon);
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.8s ease both;
+    }
+
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon);
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+      animation: fadeInUp 0.9s ease 0.2s both;
+    }
+
+    .hero-name .first { color: var(--text); }
+    .hero-name .last {
+      color: var(--neon);
+      text-shadow: 0 0 30px var(--neon-glow), 0 0 60px rgba(185,255,47,0.2);
+      display: block;
+    }
+
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 0.9s ease 0.35s both;
+    }
+
+    .hero-title span {
+      color: var(--neon);
+      font-weight: 600;
+    }
+
+    .hero-company {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.9s ease 0.45s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.9s ease 0.55s both;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2.2rem;
+      background: var(--neon);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 25px var(--neon-glow), 0 4px 20px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.4s ease;
+    }
+
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px var(--neon-glow), 0 8px 30px rgba(0,0,0,0.5);
+    }
+
+    .btn-outline {
+      padding: 0.85rem 2.2rem;
+      background: transparent;
+      color: var(--neon);
+      border: 1.5px solid var(--neon);
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(185,255,47,0.1);
+    }
+
+    .btn-outline:hover {
+      background: var(--neon-soft);
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px var(--neon-glow);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      animation: fadeIn 1.5s ease 1s both;
+    }
+
+    .scroll-indicator span {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--neon), transparent);
+      animation: scrollDown 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollDown {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ========================
+       SECTION COMMONS
+    ======================== */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--neon);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-tag::before {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--neon);
+      box-shadow: 0 0 8px var(--neon);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 3.5rem;
+      line-height: 1.15;
+    }
+
+    .section-title span { color: var(--neon); }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+      margin: 0;
+    }
+
+    /* ========================
+       ABOUT SECTION
+    ======================== */
+    #about { background: var(--bg2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-avatar-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .about-avatar {
+      width: 280px; height: 280px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      border: 2px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(185,255,47,0.1), inset 0 0 40px rgba(185,255,47,0.03);
+    }
+
+    .avatar-initials {
+      font-size: 5rem;
+      font-weight: 900;
+      color: var(--neon);
+      text-shadow: 0 0 40px var(--neon-glow);
+      line-height: 1;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .avatar-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+    }
+
+    .about-avatar::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent 0deg, var(--neon-glow) 60deg, transparent 120deg);
+      animation: rotateBorder 6s linear infinite;
+      opacity: 0.5;
+    }
+
+    .about-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      z-index: 1;
+    }
+
+    .avatar-content { position: relative; z-index: 2; text-align: center; }
+
+    @keyframes rotateBorder {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .corner-badge {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      background: var(--neon);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 50px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      z-index: 3;
+      box-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    .about-text h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .about-text h3 span { color: var(--neon); }
+
+    .about-text p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(185,255,47,0.08);
+      border-color: var(--neon);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(185,255,47,0.1);
+    }
+
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--neon);
+      text-shadow: 0 0 15px var(--neon-glow);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ========================
+       SKILLS SECTION
+    ======================== */
+    #skills { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .skill-card:hover::before { transform: scaleX(1); }
+
+    .skill-card:hover {
+      border-color: var(--neon);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(185,255,47,0.08);
+    }
+
+    .skill-icon {
+      width: 52px; height: 52px;
+      background: var(--neon-soft);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .skill-card:hover .skill-icon {
+      background: var(--neon);
+      border-color: var(--neon);
+      box-shadow: 0 0 20px var(--neon-glow);
+    }
+
+    .skill-card:hover .skill-icon svg { filter: invert(1); }
+
+    .skill-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .skill-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-bar-wrap {
+      background: var(--glass);
+      border-radius: 50px;
+      height: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skill-bar {
+      height: 100%;
+      border-radius: 50px;
+      background: linear-gradient(90deg, var(--neon-dim), var(--neon));
+      box-shadow: 0 0 10px var(--neon-glow);
+      width: 0%;
+      transition: width 1.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .skill-level {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .skill-level span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .skill-level .pct { color: var(--neon); font-weight: 700; }
+
+    /* Tags row */
+    .skills-tags {
+      margin-top: 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .tag {
+      padding: 6px 16px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .tag:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+      background: var(--neon-soft);
+      box-shadow: 0 0 12px rgba(185,255,47,0.15);
+    }
+
+    /* ========================
+       PROJECTS SECTION
+    ======================== */
+    #projects { background: var(--bg2); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.4s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: var(--neon);
+      transform: translateY(-8px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(185,255,47,0.1);
+    }
+
+    .project-visual {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-visual-broadway {
+      background: linear-gradient(135deg, #0f1a02, #1a2e04, #0f1a02);
+    }
+
+    .project-visual-infosys {
+      background: linear-gradient(135deg, #020f1a, #04172e, #020f1a);
+    }
+
+    .project-visual-hcl {
+      background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #0f0f1a);
+    }
+
+    .project-visual svg { width: 80px; height: 80px; opacity: 0.9; }
+
+    .project-light-beam {
+      position: absolute;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--neon), transparent);
+      box-shadow: 0 0 12px var(--neon);
+      top: 0;
+      animation: lightBeam 3s ease-in-out infinite;
+    }
+
+    @keyframes lightBeam {
+      0%, 100% { height: 40%; left: 20%; opacity: 0.6; }
+      33% { height: 70%; left: 50%; opacity: 1; }
+      66% { height: 50%; left: 80%; opacity: 0.7; }
+    }
+
+    .project-glow-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(185,255,47,0.3), transparent 70%);
+      animation: floatGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes floatGlow {
+      0%, 100% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.2) translate(10px, -10px); }
+    }
+
+    .project-num {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--neon);
+      background: rgba(0,0,0,0.5);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--glass-border);
+      letter-spacing: 2px;
+    }
+
+    .project-body {
+      padding: 1.5rem 1.8rem 1.8rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 0.8rem;
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      background: var(--neon-soft);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      color: var(--neon);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .project-footer {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .project-company {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .company-dot {
+      width: 6px; height: 6px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--neon);
+    }
+
+    .project-tool {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--neon);
+      background: var(--neon-soft);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
+
+    /* ========================
+       EDUCATION SECTION
+    ======================== */
+    #education { background: var(--bg); }
+
+    .edu-timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .edu-timeline::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--neon), var(--neon-dim), transparent);
+      box-shadow: 0 0 10px rgba(185,255,47,0.3);
+    }
+
+    .edu-item {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      animation: fadeInLeft 0.6s ease both;
+    }
+
+    .edu-dot {
+      width: 58px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 0.4rem;
+    }
+
+    .edu-circle {
+      width: 22px; height: 22px;
+      background: var(--bg);
+      border: 3px solid var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--neon-glow);
+      position: relative;
+      z-index: 1;
+    }
+
+    .edu-circle::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon);
+    }
+
+    .edu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      flex: 1;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .edu-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--neon);
+      box-shadow: 0 0 10px var(--neon-glow);
+    }
+
+    .edu-card:hover {
+      border-color: var(--neon);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 25px rgba(185,255,47,0.08);
+      transform: translateX(6px);
+    }
+
+    .edu-year {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--neon);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .edu-degree {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .edu-institution {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .edu-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .edu-chip {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .edu-chip.highlight {
+      background: var(--neon-soft);
+      border-color: var(--neon);
+      color: var(--neon);
+      font-weight: 600;
+    }
+
+    /* ========================
+       EXPERIENCE SECTION
+    ======================== */
+    #experience { background: var(--bg2); }
+
+    .exp-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      max-width: 780px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top left, rgba(185,255,47,0.05), transparent 60%);
+      pointer-events: none;
+    }
+
+    .exp-card:hover {
+      border-color: var(--neon);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(185,255,47,0.08);
+    }
+
+    .exp-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .exp-logo {
+      width: 60px; height: 60px;
+      background: var(--neon-soft);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .exp-info { flex: 1; }
+
+    .exp-role {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .exp-company-name {
+      font-size: 1rem;
+      color: var(--neon);
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .exp-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .exp-badge {
+      background: var(--neon);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 12px var(--neon-glow);
+    }
+
+    .exp-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 1.5rem 0;
+    }
+
+    .exp-responsibilities {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .exp-responsibilities li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .exp-responsibilities li::before {
+      content: '▸';
+      color: var(--neon);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ========================
+       CONTACT SECTION
+    ======================== */
+    #contact { background: var(--bg); }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .contact-info p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.3rem;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      group: true;
+    }
+
+    .contact-link:hover {
+      border-color: var(--neon);
+      background: var(--neon-soft);
+      transform: translateX(6px);
+      box-shadow: 0 0 20px rgba(185,255,47,0.1);
+    }
+
+    .contact-link-icon {
+      width: 42px; height: 42px;
+      background: var(--neon-soft);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+
+    .contact-link:hover .contact-link-icon {
+      background: var(--neon);
+      border-color: var(--neon);
+      box-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    .contact-link:hover .contact-link-icon svg { filter: invert(1) brightness(0); }
+
+    .contact-link-text { flex: 1; }
+    .contact-link-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 2px;
+    }
+    .contact-link-val {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.3s;
+    }
+    .contact-link:hover .contact-link-val { color: var(--neon); }
+
+    .contact-link-arrow {
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: transform 0.3s, color 0.3s;
+    }
+    .contact-link:hover .contact-link-arrow {
+      transform: translateX(4px);
+      color: var(--neon);
+    }
+
+    /* Contact form */
+    .contact-form {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+
+    .contact-form h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      resize: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-muted); }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--neon);
+      box-shadow: 0 0 0 3px rgba(185,255,47,0.1);
+      background: rgba(185,255,47,0.04);
+    }
+
+    /* ========================
+       FOOTER
+    ======================== */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid var(--glass-border);
+      background: var(--bg2);
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer span { color: var(--neon); }
+
+    /* ========================
+       ANIMATIONS
+    ======================== */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ========================
+       RESPONSIVE
+    ======================== */
+    @media (max-width: 768px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(5,5,8,0.98); flex-direction: column; padding: 1.5rem;
+        border-bottom: 1px solid var(--glass-border); gap: 1.2rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-avatar { width: 220px; height: 220px; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); }
+      .about-avatar-wrapper { order: -1; }
+
+      .contact-wrapper { grid-template-columns: 1fr; }
+
+      .projects-grid { grid-template-columns: 1fr; }
+
+      section { padding: 4rem 1.2rem; }
+
+      .exp-header { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .stat-card:last-child { grid-column: span 2; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- =====================
+       NAV
+  ===================== -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">SV.</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- =====================
+       HERO
+  ===================== -->
+  <section id="hero">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Available for Projects
+      </div>
+      <h1 class="hero-name">
+        <span class="first">S.</span>
+        <span class="last">Veerendiran</span>
+      </h1>
+      <p class="hero-title">
+        <span>Lighting Design</span> &amp; Estimation Engineer
+      </p>
+      <p class="hero-company">@ Prominence Unicell · ECE Graduate</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary" id="view-projects-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          View Projects
+        </a>
+        <a href="#contact" class="btn-outline" id="contact-me-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Get In Touch
+        </a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       ABOUT
+  ===================== -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-avatar-wrapper reveal-left">
+          <div class="about-avatar">
+            <div class="avatar-content">
+              <div class="avatar-initials">SV</div>
+              <div class="avatar-sub">Lighting Engineer</div>
+            </div>
+          </div>
+          <div class="corner-badge">✦ Pro Designer</div>
+        </div>
+        <div class="about-text reveal">
+          <div class="section-tag">Who I Am</div>
+          <h3>Illuminating Spaces with <span>Precision & Vision</span></h3>
+          <p>
+            I'm <strong style="color:var(--text)">S. Veerendiran</strong>, a passionate Lighting Design and Estimation Engineer with a strong foundation in Electronics and Communication Engineering. I specialize in crafting intelligent, energy-efficient lighting solutions for commercial, corporate, and interior spaces.
+          </p>
+          <p>
+            From conducting detailed photometric analysis and luminaire selection to creating immersive lighting environments using industry-leading tools, I bring a meticulous eye for both aesthetics and engineering precision to every project I undertake.
+          </p>
+          <div class="about-stats">
+            <div class="stat-card">
+              <div class="stat-num">3+</div>
+              <div class="stat-label">Projects Done</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">7.9</div>
+              <div class="stat-label">CGPA</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">ECE</div>
+              <div class="stat-label">Graduate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       SKILLS
+  ===================== -->
+  <section id="skills">
+    <div class="section-inner">
+      <div class="section-tag reveal">Core Expertise</div>
+      <h2 class="section-title reveal">Technical <span>Skills</span></h2>
+
+      <div class="skills-grid">
+
+        <div class="skill-card reveal">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <div class="skill-name">AutoCAD</div>
+          <div class="skill-desc">Precision 2D/3D drafting and lighting layout design for commercial and interior spaces.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="88%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">88%</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.1s">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </div>
+          <div class="skill-name">DIALux</div>
+          <div class="skill-desc">Advanced lighting simulation and photometric analysis tool for creating compliant, optimized lighting designs.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="85%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">85%</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.2s">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div class="skill-name">Lighting Simulation</div>
+          <div class="skill-desc">End-to-end simulation workflows for luminance, illuminance, and energy compliance analysis.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="82%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">82%</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.3s">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <div class="skill-name">Estimation & Costing</div>
+          <div class="skill-desc">Accurate project cost estimation, BOQ preparation, and material take-off for lighting installations.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="80%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">80%</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.4s">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+            </svg>
+          </div>
+          <div class="skill-name">Photometric Analysis</div>
+          <div class="skill-desc">In-depth analysis of light distribution, intensity curves, and compliance with international lighting standards.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="78%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">78%</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.5s">
+          <div class="skill-icon">
+            <svg width="24" height="24" fill="none" stroke="var(--neon)" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="skill-name">Client Communication</div>
+          <div class="skill-desc">Effective presentation of lighting concepts, technical reports, and design proposals to clients and stakeholders.</div>
+          <div class="skill-bar-wrap">
+            <div class="skill-bar" data-width="75%"></div>
+          </div>
+          <div class="skill-level">
+            <span>Proficiency</span>
+            <span class="pct">75%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="skills-tags reveal">
+        <span class="tag">LED Technology</span>
+        <span class="tag">Lux Level Calculation</span>
+        <span class="tag">Energy Efficiency</span>
+        <span class="tag">Interior Lighting</span>
+        <span class="tag">Commercial Lighting</span>
+        <span class="tag">DALI Control Systems</span>
+        <span class="tag">IES Files</span>
+        <span class="tag">Luminaire Selection</span>
+        <span class="tag">BOQ Preparation</span>
+        <span class="tag">ECE Fundamentals</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       PROJECTS
+  ===================== -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="section-tag reveal">Portfolio</div>
+      <h2 class="section-title reveal">Featured <span>Projects</span></h2>
+
+      <div class="projects-grid">
+
+        <!-- Project 1: Broadway -->
+        <div class="project-card reveal">
+          <div class="project-visual project-visual-broadway">
+            <div class="project-num">01 / 03</div>
+            <div class="project-glow-circle" style="width:120px;height:120px;top:10px;left:30px;"></div>
+            <div class="project-light-beam" style="left:30%;"></div>
+            <div class="project-light-beam" style="left:60%;animation-delay:1s;"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="55" width="40" height="6" rx="3" fill="rgba(185,255,47,0.15)" stroke="rgba(185,255,47,0.5)" stroke-width="1"/>
+              <path d="M40 55 L20 10" stroke="rgba(185,255,47,0.6)" stroke-width="1.5"/>
+              <path d="M40 55 L60 10" stroke="rgba(185,255,47,0.6)" stroke-width="1.5"/>
+              <circle cx="40" cy="55" r="4" fill="#b9ff2f" style="filter:drop-shadow(0 0 8px #b9ff2f)"/>
+              <ellipse cx="40" cy="12" rx="20" ry="5" fill="rgba(185,255,47,0.2)" stroke="rgba(185,255,47,0.4)" stroke-width="1"/>
+              <path d="M25 55 Q40 70 55 55" fill="rgba(185,255,47,0.07)" stroke="rgba(185,255,47,0.3)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag">Surface Lighting</span>
+              <span class="project-tag">Circuit Design</span>
+              <span class="project-tag">Commercial</span>
+            </div>
+            <h3 class="project-title">Broadway Project — Circuit in Surface Lighting</h3>
+            <p class="project-desc">
+              Designed and executed a comprehensive surface lighting circuit layout for the Broadway project. Involved luminaire placement planning, circuit routing, load calculations, and photometric simulation to achieve optimal illumination levels across all zones.
+            </p>
+            <div class="project-footer">
+              <div class="project-company">
+                <span class="company-dot"></span>
+                Prominence Unicell
+              </div>
+              <span class="project-tool">AutoCAD</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Infosys Spotlight -->
+        <div class="project-card reveal" style="transition-delay:0.15s">
+          <div class="project-visual project-visual-infosys">
+            <div class="project-num">02 / 03</div>
+            <div class="project-glow-circle" style="width:100px;height:100px;top:20px;right:20px;"></div>
+            <div class="project-light-beam" style="left:50%;animation-delay:0.5s;"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="20" r="12" fill="rgba(185,255,47,0.15)" stroke="rgba(185,255,47,0.6)" stroke-width="1.5"/>
+              <circle cx="40" cy="20" r="5" fill="#b9ff2f" style="filter:drop-shadow(0 0 10px #b9ff2f)"/>
+              <path d="M40 32 L28 65" stroke="rgba(185,255,47,0.3)" stroke-width="1"/>
+              <path d="M40 32 L52 65" stroke="rgba(185,255,47,0.3)" stroke-width="1"/>
+              <path d="M40 32 L40 65" stroke="rgba(185,255,47,0.5)" stroke-width="1.5"/>
+              <ellipse cx="40" cy="65" rx="14" ry="4" fill="rgba(185,255,47,0.15)" stroke="rgba(185,255,47,0.4)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag">Spotlight</span>
+              <span class="project-tag">Corporate</span>
+              <span class="project-tag">DIALux</span>
+            </div>
+            <h3 class="project-title">Infosys — Spotlight Lighting Project</h3>
+            <p class="project-desc">
+              Developed an advanced spotlight lighting solution for Infosys corporate spaces. Utilized DIALux for precise photometric simulation, ensuring optimal beam angles, color rendering, and energy efficiency while meeting corporate workspace illumination standards.
+            </p>
+            <div class="project-footer">
+              <div class="project-company">
+                <span class="company-dot"></span>
+                Prominence Unicell
+              </div>
+              <span class="project-tool">DIALux</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: HCL Interior Ceiling -->
+        <div class="project-card reveal" style="transition-delay:0.3s">
+          <div class="project-visual project-visual-hcl">
+            <div class="project-num">03 / 03</div>
+            <div class="project-glow-circle" style="width:140px;height:80px;top:5px;left:10px;"></div>
+            <div class="project-light-beam" style="left:25%;animation-delay:0.3s;"></div>
+            <div class="project-light-beam" style="left:50%;animation-delay:1.2s;"></div>
+            <div class="project-light-beam" style="left:75%;animation-delay:0.7s;"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="5" y="8" width="70" height="10" rx="2" fill="rgba(185,255,47,0.1)" stroke="rgba(185,255,47,0.5)" stroke-width="1"/>
+              <circle cx="20" cy="13" r="4" fill="#b9ff2f" style="filter:drop-shadow(0 0 6px #b9ff2f)"/>
+              <circle cx="40" cy="13" r="4" fill="#b9ff2f" style="filter:drop-shadow(0 0 6px #b9ff2f)"/>
+              <circle cx="60" cy="13" r="4" fill="#b9ff2f" style="filter:drop-shadow(0 0 6px #b9ff2f)"/>
+              <path d="M20 18 L10 65" stroke="rgba(185,255,47,0.2)" stroke-width="1"/>
+              <path d="M20 18 L30 65" stroke="rgba(185,255,47,0.2)" stroke-width="1"/>
+              <path d="M40 18 L30 65" stroke="rgba(185,255,47,0.25)" stroke-width="1"/>
+              <path d="M40 18 L50 65" stroke="rgba(185,255,47,0.25)" stroke-width="1"/>
+              <path d="M60 18 L50 65" stroke="rgba(185,255,47,0.2)" stroke-width="1"/>
+              <path d="M60 18 L70 65" stroke="rgba(185,255,47,0.2)" stroke-width="1"/>
+              <rect x="5" y="63" width="70" height="5" rx="2" fill="rgba(185,255,47,0.07)" stroke="rgba(185,255,47,0.2)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <span class="project-tag">Interior</span>
+              <span class="project-tag">Ceiling Design</span>
+              <span class="project-tag">DIALux</span>
+            </div>
+            <h3 class="project-title">HCL — Interior Ceiling Lighting Project</h3>
+            <p class="project-desc">
+              Engineered a complete interior ceiling lighting design for HCL's workspace using DIALux. Covered recessed fixture layouts, ceiling grid planning, lux level compliance, and glare control to create a comfortable, productive environment for employees.
+            </p>
+            <div class="project-footer">
+              <div class="project-company">
+                <span class="company-dot"></span>
+                Prominence Unicell
+              </div>
+              <span class="project-tool">DIALux</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       EDUCATION
+  ===================== -->
+  <section id="education">
+    <div class="section-inner">
+      <div class="section-tag reveal">Academic Background</div>
+      <h2 class="section-title reveal"><span>Education</span> & Qualifications</h2>
+
+      <div class="edu-timeline">
+        <div class="edu-item reveal">
+          <div class="edu-dot">
+            <div class="edu-circle"></div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-year">2019 – 2023</div>
+            <div class="edu-degree">B.E. — Electronics & Communication Engineering</div>
+            <div class="edu-institution">Kalaignar Karunanidhi Institute of Technology</div>
+            <div class="edu-chips">
+              <span class="edu-chip highlight">⭐ CGPA: 7.9 / 10</span>
+              <span class="edu-chip">Circuit Design</span>
+              <span class="edu-chip">Signal Processing</span>
+              <span class="edu-chip">Embedded Systems</span>
+              <span class="edu-chip">Power Electronics</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="edu-item reveal" style="transition-delay:0.15s">
+          <div class="edu-dot">
+            <div class="edu-circle"></div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-year">Ongoing</div>
+            <div class="edu-degree">Professional Development</div>
+            <div class="edu-institution">Lighting Design Engineering</div>
+            <div class="edu-chips">
+              <span class="edu-chip highlight">DIALux Certified</span>
+              <span class="edu-chip">Photometric Analysis</span>
+              <span class="edu-chip">Energy Standards</span>
+              <span class="edu-chip">ISO 8995 Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       EXPERIENCE
+  ===================== -->
+  <section id="experience">
+    <div class="section-inner">
+      <div class="section-tag reveal">Career</div>
+      <h2 class="section-title reveal">Work <span>Experience</span></h2>
+
+      <div class="exp-card reveal">
+        <div class="exp-header">
+          <div style="display:flex;gap:1.2rem;align-items:flex-start;flex:1;flex-wrap:wrap">
+            <div class="exp-logo">💡</div>
+            <div class="exp-info">
+              <div class="exp-role">Lighting Designer & Estimation Engineer</div>
+              <div class="exp-company-name">Prominence Unicell</div>
+              <div class="exp-meta">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Present · Full-Time
+              </div>
+            </div>
+          </div>
+          <div class="exp-badge">Current Role</div>
+        </div>
+        <div class="exp-divider"></div>
+        <ul class="exp-responsibilities">
+          <li>Developed comprehensive lighting design layouts for large-scale commercial and corporate projects using AutoCAD and DIALux simulation tools.</li>
+          <li>Conducted photometric analysis and luminaire selection ensuring compliance with international illumination standards (ASHRAE, LEED, ISO 8995).</li>
+          <li>Prepared detailed Bill of Quantities (BOQ), project cost estimations, and material take-off reports for client approvals.</li>
+          <li>Delivered spotlight and surface lighting circuit designs for prominent clients including Infosys, HCL, and Broadway project.</li>
+          <li>Collaborated with project managers and on-site teams to ensure accurate implementation of lighting design specifications.</li>
+          <li>Optimized lighting systems for energy efficiency, reducing energy consumption while maintaining required lux levels.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- =====================
+       CONTACT
+  ===================== -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="section-tag reveal">Let's Connect</div>
+      <h2 class="section-title reveal">Get In <span>Touch</span></h2>
+
+      <div class="contact-wrapper">
+        <div class="contact-info reveal-left">
+          <h3>Have a project in mind?</h3>
+          <p>Whether you need expert lighting design consultation, project estimation, or a full-scale design solution — I'm ready to help you illuminate your vision. Let's create something brilliant together.</p>
+
+          <div class="contact-links">
+            <a href="mailto:Veerendiran018@gmail.com" class="contact-link" id="email-link">
+              <div class="contact-link-icon">
+                <svg width="18" height="18" fill="none" stroke="var(--neon)" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div class="contact-link-text">
+                <div class="contact-link-label">Email</div>
+                <div class="contact-link-val">Veerendiran018@gmail.com</div>
+              </div>
+              <span class="contact-link-arrow">→</span>
+            </a>
+
+            <a href="tel:+918072812241" class="contact-link" id="phone-link">
+              <div class="contact-link-icon">
+                <svg width="18" height="18" fill="none" stroke="var(--neon)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+              <div class="contact-link-text">
+                <div class="contact-link-label">Phone</div>
+                <div class="contact-link-val">+91 80728 12241</div>
+              </div>
+              <span class="contact-link-arrow">→</span>
+            </a>
+
+            <a href="#" class="contact-link" id="location-link">
+              <div class="contact-link-icon">
+                <svg width="18" height="18" fill="none" stroke="var(--neon)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="contact-link-text">
+                <div class="contact-link-label">Company</div>
+                <div class="contact-link-val">Prominence Unicell, India</div>
+              </div>
+              <span class="contact-link-arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-form reveal">
+          <h3>Send a Message</h3>
+          <div class="form-group">
+            <label for="name-input">Your Name</label>
+            <input type="text" id="name-input" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label for="email-input">Email Address</label>
+            <input type="email" id="email-input" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="subject-input">Subject</label>
+            <input type="text" id="subject-input" placeholder="Project inquiry, collaboration..." />
+          </div>
+          <div class="form-group">
+            <label for="message-input">Message</label>
+            <textarea id="message-input" rows="5" placeholder="Tell me about your project..."></textarea>
+          </div>
+          <button class="btn-primary" id="send-btn" style="width:100%;justify-content:center;" onclick="handleSend()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send Message
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================
+       FOOTER
+  ===================== -->
+  <footer>
+    <p>
+      Designed & Developed for <span>S. Veerendiran</span> &nbsp;·&nbsp;
+      Lighting Designer & Estimation Engineer &nbsp;·&nbsp;
+      <span>Prominence Unicell</span>
+    </p>
+    <p style="margin-top:0.5rem;font-size:0.75rem;">
+      &copy; 2024 S. Veerendiran. All rights reserved. &nbsp;·&nbsp; Built with ✦ precision
+    </p>
+  </footer>
+
+  <!-- =====================
+       SCRIPTS
+  ===================== -->
+  <script>
+    /* ---- Particle System ---- */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let W, H;
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.size = Math.random() * 1.5 + 0.3;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.pulse = Math.random() * Math.PI * 2;
+        this.pulseSpeed = Math.random() * 0.02 + 0.005;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.pulse += this.pulseSpeed;
+        if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+      }
+      draw() {
+        const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(185, 255, 47, ${alpha})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+    function drawConnections() {
+      const max = 100;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < max) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(185,255,47,${0.06 * (1 - dist / max)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      drawConnections();
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    /* ---- Scroll Reveal ---- */
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Trigger skill bars
+          if (entry.target.classList.contains('skill-card')) {
+            const bar = entry.target.querySelector('.skill-bar');
+            if (bar) {
+              setTimeout(() => {
+                bar.style.width = bar.getAttribute('data-width');
+              }, 200);
+            }
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    /* ---- Trigger skill bars for already visible cards ---- */
+    document.querySelectorAll('.skill-card').forEach(card => {
+      const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const bar = e.target.querySelector('.skill-bar');
+            if (bar) setTimeout(() => { bar.style.width = bar.getAttribute('data-width'); }, 300);
+            cardObserver.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      cardObserver.observe(card);
+    });
+
+    /* ---- Mobile Menu ---- */
+    function toggleMenu() {
+      const links = document.getElementById('nav-links');
+      links.classList.toggle('open');
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('nav-links').classList.remove('open');
+      });
+    });
+
+    /* ---- Nav Scroll Effect ---- */
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.5)';
+      } else {
+        nav.style.boxShadow = 'none';
+      }
+    });
+
+    /* ---- Typing Effect on Hero ---- */
+    const titles = [
+      'Lighting Design Engineer',
+      'DIALux Specialist',
+      'Estimation Engineer',
+      'AutoCAD Expert',
+      'Photometric Analyst'
+    ];
+    let tIdx = 0, cIdx = 0, deleting = false;
+    const titleEl = document.querySelector('.hero-title');
+
+    function typeEffect() {
+      const current = titles[tIdx];
+      if (!deleting) {
+        cIdx++;
+        titleEl.innerHTML = `<span>${current.slice(0, cIdx)}</span>`;
+        if (cIdx === current.length) {
+          deleting = true;
+          setTimeout(typeEffect, 2000);
+          return;
+        }
+      } else {
+        cIdx--;
+        titleEl.innerHTML = `<span>${current.slice(0, cIdx)}</span>`;
+        if (cIdx === 0) {
+          deleting = false;
+          tIdx = (tIdx + 1) % titles.length;
+        }
+      }
+      setTimeout(typeEffect, deleting ? 50 : 80);
+    }
+
+    setTimeout(typeEffect, 1500);
+
+    /* ---- Contact Form ---- */
+    function handleSend() {
+      const name = document.getElementById('name-input').value.trim();
+      const email = document.getElementById('email-input').value.trim();
+      const msg = document.getElementById('message-input').value.trim();
+      const btn = document.getElementById('send-btn');
+
+      if (!name || !email || !msg) {
+        btn.style.background = '#ff4444';
+        btn.innerHTML = '⚠ Please fill all required fields';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Message`;
+        }, 2000);
+        return;
+      }
+
+      btn.innerHTML = '⏳ Sending...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.style.background = '#22c55e';
+        btn.innerHTML = '✓ Message Sent!';
+        document.getElementById('name-input').value = '';
+        document.getElementById('email-input').value = '';
+        document.getElementById('subject-input').value = '';
+        document.getElementById('message-input').value = '';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.disabled = false;
+          btn.innerHTML = `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Message`;
+        }, 3000);
+      }, 1500);
+    }
+
+    /* ---- Cursor glow on mouse move ---- */
+    document.addEventListener('mousemove', (e) => {
+      const glow = document.querySelector('.hero-bg-glow');
+      if (glow) {
+        const rect = document.getElementById('hero').getBoundingClientRect();
+        if (e.clientY < rect.bottom) {
+          const x = (e.clientX / window.innerWidth) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          glow.style.left = `${x}%`;
+          glow.style.top = `calc(${y}% + ${rect.top}px - ${rect.top}px)`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
